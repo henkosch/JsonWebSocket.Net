@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonWebSocket", "JsonWebSocket\JsonWebSocket.csproj", "{74E8AC48-7C43-48B2-870F-DBCFD75CF8A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleServer", "ExampleServer\ExampleServer.csproj", "{FC3AEE4C-96CB-4170-87CD-719C238612EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleClient", "ExampleClient\ExampleClient.csproj", "{1A58FB18-C3D5-4121-8D80-FD9314390E47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{74E8AC48-7C43-48B2-870F-DBCFD75CF8A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74E8AC48-7C43-48B2-870F-DBCFD75CF8A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74E8AC48-7C43-48B2-870F-DBCFD75CF8A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC3AEE4C-96CB-4170-87CD-719C238612EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC3AEE4C-96CB-4170-87CD-719C238612EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC3AEE4C-96CB-4170-87CD-719C238612EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC3AEE4C-96CB-4170-87CD-719C238612EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A58FB18-C3D5-4121-8D80-FD9314390E47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A58FB18-C3D5-4121-8D80-FD9314390E47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A58FB18-C3D5-4121-8D80-FD9314390E47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A58FB18-C3D5-4121-8D80-FD9314390E47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
