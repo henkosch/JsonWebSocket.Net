@@ -18,37 +18,34 @@ namespace WebSocketClient
 
         static async Task Connect(string url)
         {
-            using (var socket = new ClientWebSocket())
+            using (var socket = new JsonSocketClient())
             {
-                await socket.ConnectAsync(new Uri(url), CancellationToken.None);
-                Console.WriteLine("Connected.");
+                socket.OnReceived += (data) =>
+                {
+                    Console.WriteLine("Received: {0} {1}", data.Type, data.Data);
+                };
 
-                var jsonSocket = new JsonSocket(socket);
+                await socket.Connect(url);
 
-                await Task.WhenAll(Send(jsonSocket), Receive(jsonSocket));
+                Console.WriteLine("Connected to {0}.", url);
+
+                await Task.WhenAll(
+                    socket.StartReceiving(),
+                    StartSending(socket)
+                );
 
                 Console.WriteLine("Disconnected.");
             }
         }
 
-        static async Task Send(JsonSocket jsonSocket)
+        static async Task StartSending(JsonSocket socket)
         {
-            while (jsonSocket.Connected)
+            while (socket.Connected)
             {
-                dynamic dataObject = new { name = "Name", time = DateTime.Now };
-                await jsonSocket.SendBinaryBson(dataObject);
+                dynamic data = new { name = "Sample", time = DateTime.Now };
+                await socket.SendBinaryBson(data);
                 await Task.Delay(1000);
             }
-        }
-
-        static async Task Receive(JsonSocket jsonSocket)
-        {
-            while (jsonSocket.Connected)
-            {
-                var buffer = new ArraySegment<byte>(new byte[8192]);
-                var data = await jsonSocket.Receive(buffer);
-                Console.WriteLine("[Receive] Received: {0} {1}", data.Type, data.Data);
-            }
-        }
+        }        
     }
 }

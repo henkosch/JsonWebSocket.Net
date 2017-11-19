@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>Henko.JsonWebSocket</PackageId>
+    <Authors>Henrik Schnell</Authors>
+    <Company>Henko</Company>
+    <Description>Simple .NET Standard library for sending json and bson messages through WebSocket.</Description>
+    <PackageProjectUrl>https://github.com/henkosch/JsonWebSocket.Net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/henkosch/JsonWebSocket.Net</RepositoryUrl>
+    <PackageTags>WebSocket WebSockets Json Binary Bson Standard Asp.NET AspNET AspNETCore</PackageTags>
+    <Version>2.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

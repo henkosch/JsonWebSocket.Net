@@ -23,7 +23,23 @@ namespace WebSocketServer
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseWebSockets();
-            app.UseJsonWebSockets<WebSocketHandler>();
+            app.Map("/ws", ws => ws.UseJsonWebSockets(ClientConnected));
+        }
+
+        public void ClientConnected(JsonSocket socket)
+        {
+            Console.WriteLine("[{0}] Client connected.", socket.RemoteEndPoint);
+
+            socket.OnReceivedBinaryBson += async (data) =>
+            {
+                Console.WriteLine("[{0}] Received binary Bson: {1}", socket.RemoteEndPoint, data);
+                await socket.SendBinaryBson(data);
+            };
+
+            socket.OnDisconnected += () =>
+            {
+                Console.WriteLine("[{0}] Client disconnected.", socket.RemoteEndPoint);
+            };
         }
     }
 }

@@ -3,31 +3,25 @@ using System;
 using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace JsonWebSocket
 {
     public static class JsonWebSocketHandlerMiddlewareExtensions
     {
-        public static IApplicationBuilder UseJsonWebSockets<T>(this IApplicationBuilder app, string route = "/ws") where T : IJsonWebSocketHandler, new()
+        public static IApplicationBuilder UseJsonWebSockets(this IApplicationBuilder app, Action<JsonSocket> clientHandler)
         {
-            return app.Map(route, AcceptWebSocketConnection<T>);
-        }
-
-        static void AcceptWebSocketConnection<T>(IApplicationBuilder app) where T : IJsonWebSocketHandler, new()
-        {
-            app.Use(async (context, next) =>
+            return app.Use(async (context, next) =>
             {
-                if (!context.WebSockets.IsWebSocketRequest)
-                {
-                    context.Response.StatusCode = 400;
-                    return;
-                }
+                if (!context.WebSockets.IsWebSocketRequest) return;
 
                 WebSocket socket = await context.WebSockets.AcceptWebSocketAsync();
 
-                var handler = new T();
+                JsonSocket jsonSocket = new JsonSocket(context, socket, context.RequestAborted);
 
-                await handler.Start(socket, context.RequestAborted);
+                clientHandler(jsonSocket);
+
+                await jsonSocket.StartReceiving();
             });
         }
     }

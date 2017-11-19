@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -12,17 +14,75 @@ namespace JsonWebSocket
 {
     public class JsonSocket
     {
-        WebSocket socket;
-        CancellationToken ct;
+        protected HttpContext context;
+        protected WebSocket socket;
+
+        protected CancellationToken ct;
 
         public WebSocket Socket { get { return socket; } }
 
         public bool Connected { get { return socket.State == WebSocketState.Open; } }
 
-        public JsonSocket(WebSocket socket, CancellationToken ct = default(CancellationToken))
+        public JsonSocket(HttpContext context, WebSocket socket, CancellationToken ct = default(CancellationToken))
         {
+            this.context = context;
             this.socket = socket;
             this.ct = ct;
+        }
+
+        public event Action<Exception> OnReceiveError;
+        public event Action<ReceivedData> OnReceived;
+        public event Action<object> OnReceivedTextJson;
+        public event Action<string> OnReceivedTextString;
+        public event Action<object> OnReceivedBinaryBson;
+        public event Action<byte[]> OnReceivedBinaryData;
+        public event Action OnReceivedClose;
+        public event Action OnDisconnected;   
+        
+        public HttpContext Context { get { return context; } }
+        public string ConnectionId { get { return context?.Connection.Id; } }
+        public EndPoint RemoteEndPoint { get { return context != null ? new IPEndPoint(context.Connection.RemoteIpAddress, context.Connection.RemotePort) : null; } }
+
+        public async Task StartReceiving(int bufferSize = 102400)
+        {
+            try
+            {
+                var buffer = new ArraySegment<byte>(new byte[bufferSize]);
+
+                while (Connected)
+                {
+                    var received = await Receive(buffer);
+
+                    OnReceived?.Invoke(received);
+
+                    switch (received.Type)
+                    {
+                        case ReceivedDataType.TextJson:
+                            OnReceivedTextJson?.Invoke(received.TextJson);
+                            break;
+                        case ReceivedDataType.TextString:
+                            OnReceivedTextString?.Invoke(received.TextString);
+                            break;
+                        case ReceivedDataType.BinaryBson:
+                            OnReceivedBinaryBson?.Invoke(received.BinaryBson);
+                            break;
+                        case ReceivedDataType.BinaryData:
+                            OnReceivedBinaryData?.Invoke(received.BinaryData);
+                            break;
+                        case ReceivedDataType.Close:
+                            OnReceivedClose?.Invoke();
+                            break;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                OnReceiveError?.Invoke(e);
+            }
+            finally
+            {
+                OnDisconnected?.Invoke();
+            }
         }
 
         public async Task<ReceivedData> Receive(ArraySegment<byte> buffer)
