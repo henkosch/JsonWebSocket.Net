@@ -24,9 +24,8 @@ namespace JsonWebSocket
                     {
                         clientHandler(jsonSocket);
                     }
-                    catch (Exception e)
+                    catch
                     {
-                        await jsonSocket.SendClose(WebSocketCloseStatus.InternalServerError, e.Message);
                         socket.Dispose();
                     }
 
