@@ -12,7 +12,7 @@ using System.Threading;
 using System.IO;
 using JsonWebSocket;
 
-namespace WebSocketServer
+namespace ExampleServer
 {
     public class Startup
     {

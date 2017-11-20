@@ -196,9 +196,9 @@ namespace JsonWebSocket
             await socket.SendAsync(new ArraySegment<byte>(data), WebSocketMessageType.Binary, true, ct);
         }
 
-        public async Task SendClose()
+        public async Task SendClose(WebSocketCloseStatus status = WebSocketCloseStatus.NormalClosure, string message = null)
         {
-            await socket.SendAsync(new ArraySegment<byte>(), WebSocketMessageType.Close, true, ct);
+            await socket.CloseAsync(status, message, ct);
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WebSocketClient
+namespace ExampleClient
 {
     class Program
     {
