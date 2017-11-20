@@ -9,7 +9,7 @@
     <PackageProjectUrl>https://github.com/henkosch/JsonWebSocket.Net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/henkosch/JsonWebSocket.Net</RepositoryUrl>
     <PackageTags>WebSocket WebSockets Json Binary Bson Standard Asp.NET AspNET AspNETCore</PackageTags>
-    <Version>2.1.0</Version>
+    <Version>2.1.1</Version>
     <PackageIconUrl>https://github.com/henkosch/JsonWebSocket.Net/raw/master/icon.png</PackageIconUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>

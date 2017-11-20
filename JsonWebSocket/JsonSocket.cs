@@ -111,7 +111,7 @@ namespace JsonWebSocket
                             return new ReceivedData(ReceivedDataType.BinaryData, stream.ToArray());
                         }
                     default:
-                        return null;
+                        return new ReceivedData(ReceivedDataType.Close, null);
                 }
             }
         }
